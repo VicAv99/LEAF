@@ -1,7 +1,141 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "leaflet": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/leaflet",
+      "sourceRoot": "apps/leaflet/src",
+      "prefix": "leaf",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/leaflet",
+            "index": "apps/leaflet/src/index.html",
+            "main": "apps/leaflet/src/main.ts",
+            "polyfills": "apps/leaflet/src/polyfills.ts",
+            "tsConfig": "apps/leaflet/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "apps/leaflet/src/favicon.ico",
+              "apps/leaflet/src/assets"
+            ],
+            "styles": ["apps/leaflet/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/leaflet/src/environments/environment.ts",
+                  "with": "apps/leaflet/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "leaflet:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "leaflet:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "leaflet:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/leaflet/tsconfig.app.json",
+              "apps/leaflet/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/leaflet/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/leaflet/jest.config.js",
+            "tsConfig": "apps/leaflet/tsconfig.spec.json",
+            "setupFile": "apps/leaflet/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "leaflet-e2e": {
+      "root": "apps/leaflet-e2e",
+      "sourceRoot": "apps/leaflet-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/leaflet-e2e/cypress.json",
+            "tsConfig": "apps/leaflet-e2e/tsconfig.e2e.json",
+            "devServerTarget": "leaflet:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "leaflet:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/leaflet-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/leaflet-e2e/**"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "leaflet"
 }
